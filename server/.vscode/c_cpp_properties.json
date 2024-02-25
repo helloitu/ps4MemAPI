@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "name": "FreeBSD-ps4memapi",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/ps4-payload-sdk/libPS4/include/**",
+                "${workspaceFolder}/ps4-ksdk/include/**"
+            ],
+            "cStandard": "c99",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}

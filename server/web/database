@@ -1,0 +1,11 @@
+CREATE DATABASE ps4trainer;
+USE ps4trainer;
+
+CREATE TABLE cheats(
+    id int NOT NULL AUTO_INCREMENT,
+    titleid varchar(255),
+    region varchar(255),
+    version varchar(255),
+    cheatdata TEXT,
+    PRIMARY KEY (id)
+);

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<script src="jquery.js"></script>
+	<style>
+		table {
+			border-collapse: collapse;   
+			width: 50%;
+		}
+		tr {
+			background-color: #eee;
+			border-top: 1px solid #fff;
+		}
+		tr:hover {
+			background-color: #ccc;
+		}
+		th {
+			background-color: #fff;
+		}
+		th, td {
+			padding: 3px 5px;
+		}
+		td:hover {
+			cursor: pointer;
+		}
+	</style>
+	<script>
+		function getJson(url, callback)  {
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', url, true);
+			xhr.responseType = 'json';
+			xhr.onreadystatechange = function() {
+				if(xhr.readyState === 4 && xhr.status === 200)
+				{
+					callback(xhr.response);
+				}
+				
+			}
+			xhr.send();
+		}
+		
+		function onload() {
+			getJson("https://easternkiwi.com/trainer/cheat.php", function(data) {
+				var table = document.getElementById("output");
+				for(var i = 0; i < data.length; i++) {
+					var row = table.insertRow(-1);
+					var cell0 = row.insertCell(0);
+					var cell1 = row.insertCell(1);
+					var cell2 = row.insertCell(2);
+
+					cell0.innerHTML = data[i].titleid;					
+					cell1.innerHTML = data[i].region;
+					cell2.innerHTML = data[i].version;
+
+				}
+
+				loaded();
+			});
+		}
+
+		function loaded() {
+			$('#output tr').click(function() {
+				var title =  $(this).find("td")[0].textContent;
+				var region = $(this).find("td")[1].textContent;
+				var version = $(this).find("td")[2].textContent;
+				getJson("https://easternkiwi.com/trainer/cheat.php?titleid="+title+"&region="+region+"&version="+version, function(data) {
+					var table = document.getElementById("selected");
+					table.style.display = "";
+					var cells = table.rows[1].cells;
+					cells[0].innerHTML = data.name;					
+					cells[1].innerHTML = data.titleid;
+					cells[2].innerHTML = data.region;
+					cells[3].innerHTML = data.version;
+					cells[4].innerHTML = data.process;
+				});
+			});		
+		}
+
+		function search() {
+			var input, filter, table, tr, td, i, txtValue;
+			input = document.getElementById("textbox");
+			filter = input.value.toUpperCase();
+			table = document.getElementById("output");
+			tr = table.getElementsByTagName("tr");
+
+			for(i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[0];
+				if(td) {
+					txtValue = td.textContent || td.innerText;
+					if(txtValue.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}       
+			}
+
+		}
+	</script>
+	<head>
+		<title>PS4 Trainer</title>
+	</head>
+	<body onload="onload()">
+		<table id="output">
+			<tr>
+				<th>titleid</td>
+				<th>region</td>
+				<th>version</td>
+			</tr>
+		</table>
+		<input type="text" id="textbox" onkeyup="search()" placeholder="Search for title.."><br>
+		<table id ="selected" style="display:none">
+			<tr>
+				<th>name</th>
+				<th>titleid</td>
+				<th>region</td>
+				<th>version</td>
+				<th>process</th>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>
+	</body>
+</html>
